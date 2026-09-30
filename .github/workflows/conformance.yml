@@ -1,0 +1,68 @@
+name: Conformance
+
+on:
+  workflow_dispatch:
+    inputs:
+      go_ref:
+        description: "pwn (Go) branch, tag or SHA"
+        default: main
+      julia_ref:
+        description: "PWNModel.jl branch, tag or SHA"
+        default: main
+
+jobs:
+  conformance:
+    name: Go vs. Julia
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out conformance
+        uses: actions/checkout@v6
+        with:
+          path: conformance
+      - name: Check out pwn (Go)
+        uses: actions/checkout@v6
+        with:
+          repository: pwn-model/pwn
+          ref: ${{ inputs.go_ref }}
+          path: pwn
+      - name: Check out PWNModel.jl
+        uses: actions/checkout@v6
+        with:
+          repository: pwn-model/PWNModel.jl
+          ref: ${{ inputs.julia_ref }}
+          path: PWNModel.jl
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.x'
+          cache-dependency-path: pwn/go.sum
+      - name: Install Go model dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y libgl1-mesa-dev xorg-dev xvfb
+
+      - name: Set up Julia
+        uses: julia-actions/setup-julia@v3
+        with:
+          version: '1'
+      - uses: julia-actions/cache@v3
+      - name: Install Julia model dependencies
+        run: julia --project=PWNModel.jl -e 'using Pkg; Pkg.instantiate()'
+
+      - name: Run Go model
+        run: xvfb-run -a conformance/scripts/run_go.sh
+      - name: Run Julia model
+        run: conformance/scripts/run_julia.sh
+      - name: Compare outputs
+        run: conformance/scripts/compare.sh
+
+      - name: Upload outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: conformance-output
+          path: |
+            conformance/out/go
+            conformance/out/julia
