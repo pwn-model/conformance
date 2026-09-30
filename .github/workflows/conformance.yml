@@ -9,6 +9,7 @@ on:
       julia_ref:
         description: "PWNModel.jl branch, tag or SHA"
         default: main
+  pull_request:
 
 jobs:
   conformance:
