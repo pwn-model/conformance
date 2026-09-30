@@ -4,7 +4,8 @@ Tests for conformance between the two PWN model implementations,
 [pwn](https://github.com/pwn-model/pwn) (Go) and
 [PWNModel.jl](https://github.com/pwn-model/PWNModel.jl) (Julia).
 
-Both implementations run the same headless config (`configs/default.yaml`),
+Both implementations run the same headless config
+([`configs/default.yaml`](https://github.com/pwn-model/conformance/blob/main/configs/default.yaml)),
 and their CSV output must be identical.
 
 ## Running locally
