@@ -57,7 +57,7 @@ jobs:
       - name: Run Julia model
         run: conformance/scripts/run_julia.sh
       - name: Compare outputs
-        run: conformance/scripts/compare.sh
+        run: python3 conformance/scripts/compare.py
 
       - name: Upload outputs
         if: always()

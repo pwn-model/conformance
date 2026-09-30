@@ -14,7 +14,7 @@ With `pwn/` and `PWNModel.jl/` checked out next to this repository:
 ```sh
 scripts/run_go.sh      # runs the Go model with configs/default.yaml     -> out/go/
 scripts/run_julia.sh   # runs the Julia model with configs/default.yaml  -> out/julia/
-scripts/compare.sh     # compares the outputs, non-zero exit on mismatch
+scripts/compare.py     # compares the outputs as numbers, non-zero exit on mismatch
 ```
 
 ## CI
