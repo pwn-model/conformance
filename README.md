@@ -1,5 +1,7 @@
 # Model conformance tests
 
+[![Conformance](https://github.com/pwn-model/conformance/actions/workflows/conformance.yml/badge.svg)](https://github.com/pwn-model/conformance/actions/workflows/conformance.yml)
+
 Tests for conformance between the two PWN model implementations,
 [pwn](https://github.com/pwn-model/pwn) (Go) and
 [PWNModel.jl](https://github.com/pwn-model/PWNModel.jl) (Julia).
