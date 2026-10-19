@@ -9,7 +9,15 @@ on:
       julia_ref:
         description: "PWNModel.jl branch, tag or SHA"
         default: main
+      spec_ref:
+        description: "model-spec branch, tag or SHA"
+        default: main
   pull_request:
+  schedule:
+    # Nightly, to catch changes in the model repositories and the parameter
+    # docs. Without inputs, all repositories are checked out at their default
+    # branch.
+    - cron: '0 3 * * *'
 
 jobs:
   conformance:
@@ -33,6 +41,19 @@ jobs:
           repository: pwn-model/PWNModel.jl
           ref: ${{ inputs.julia_ref }}
           path: PWNModel.jl
+      - name: Check out model-spec
+        uses: actions/checkout@v6
+        with:
+          repository: pwn-model/model-spec
+          ref: ${{ inputs.spec_ref }}
+          path: model-spec
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install Python dependencies
+        run: pip install pyyaml
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -52,12 +73,18 @@ jobs:
       - name: Install Julia model dependencies
         run: julia --project=PWNModel.jl -e 'using Pkg; Pkg.instantiate()'
 
+      - name: Generate config from parameter docs
+        run: python conformance/scripts/params_to_config.py
       - name: Run Go model
         run: xvfb-run -a conformance/scripts/run_go.sh
       - name: Run Julia model
         run: conformance/scripts/run_julia.sh
       - name: Compare outputs
-        run: python3 conformance/scripts/compare.py
+        run: python conformance/scripts/compare.py
+      - name: Check parameter docs
+        # Also when an earlier step failed, to report all problems at once.
+        if: ${{ !cancelled() }}
+        run: python conformance/scripts/check_params.py
 
       - name: Upload outputs
         if: always()
@@ -65,5 +92,6 @@ jobs:
         with:
           name: conformance-output
           path: |
+            conformance/out/default.yaml
             conformance/out/go
             conformance/out/julia
