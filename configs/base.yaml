@@ -1,0 +1,20 @@
+# Everything of the conformance config that is not a model parameter, merged
+# with the documented parameter values from model-spec/parameters.yaml by
+# scripts/params_to_config.py: the seed, and systems appended after the
+# model's own systems (reporters).
+
+seed: 1
+
+systems:
+  - type: CSV
+    observer:
+      type: TreePopulation
+    file: tree_pop.csv
+  - type: CSV
+    observer:
+      type: TreeColonization
+    file: tree_col.csv
+  - type: CSV
+    observer:
+      type: TreeDamage
+    file: tree_damage.csv
