@@ -34,6 +34,8 @@ The Python scripts require [PyYAML](https://pypi.org/project/PyYAML/) (except `c
 
 ## CI
 
-The workflow [conformance.yml](.github/workflows/conformance.yml) is triggered manually
-(Actions → Conformance → Run workflow), with the refs of both model repositories as inputs.
-Model outputs are uploaded as a workflow artifact.
+The workflow [conformance.yml](.github/workflows/conformance.yml) runs nightly and on pull requests,
+with all repositories at their default branch.
+It can also be triggered manually (Actions → Conformance → Run workflow),
+with the refs of both model repositories and of model-spec as inputs.
+The generated config and the model outputs are uploaded as a workflow artifact.
