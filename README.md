@@ -31,18 +31,6 @@ python scripts/compare.py           # compares the outputs as numbers, non-zero 
 
 The run scripts optionally take another config file and output directory as arguments.
 
-The octant variant of the model is checked with [`configs/octants.yaml`](https://github.com/pwn-model/conformance/blob/main/configs/octants.yaml):
-the documented parameters, with the attraction and movement systems
-(`TreeAttraction`, `BeetleMovement`) replaced by their octant counterparts
-(`TreeAttractionOctants`, `BeetleMovementOctants`), which take the same parameters.
-Unlike the default config, it is not generated, so its parameter values must be kept in sync with `parameters.yaml` by hand.
-
-```sh
-scripts/run_go.sh configs/octants.yaml out/go_octants
-scripts/run_julia.sh configs/octants.yaml out/julia_octants
-python scripts/compare.py out/go_octants out/julia_octants
-```
-
 The Python scripts require [PyYAML](https://pypi.org/project/PyYAML/) (except `compare.py`).
 
 ## CI
@@ -51,5 +39,4 @@ The workflow [conformance.yml](.github/workflows/conformance.yml) runs nightly a
 with all repositories at their default branch.
 It can also be triggered manually (Actions → Conformance → Run workflow),
 with the refs of both model repositories and of model-spec as inputs.
-It checks the default config as well as the octant variant.
 The generated config and the model outputs are uploaded as a workflow artifact.
