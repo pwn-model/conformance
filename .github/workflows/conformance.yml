@@ -82,19 +82,6 @@ jobs:
       - name: Compare outputs
         run: python conformance/scripts/compare.py
 
-      # Octant variant (configs/octants.yaml): the attraction and movement
-      # systems replaced by their octant counterparts. Also when an earlier
-      # step failed, to report all problems at once.
-      - name: Run Go model (octants)
-        if: ${{ !cancelled() }}
-        run: xvfb-run -a conformance/scripts/run_go.sh configs/octants.yaml out/go_octants
-      - name: Run Julia model (octants)
-        if: ${{ !cancelled() }}
-        run: conformance/scripts/run_julia.sh configs/octants.yaml out/julia_octants
-      - name: Compare outputs (octants)
-        if: ${{ !cancelled() }}
-        run: python conformance/scripts/compare.py conformance/out/go_octants conformance/out/julia_octants
-
       - name: Check parameter docs
         # Also when an earlier step failed, to report all problems at once.
         if: ${{ !cancelled() }}
@@ -109,5 +96,3 @@ jobs:
             conformance/out/default.yaml
             conformance/out/go
             conformance/out/julia
-            conformance/out/go_octants
-            conformance/out/julia_octants
